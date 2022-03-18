@@ -47,7 +47,7 @@ RUN cd /srv/php-7.1.21 \
 --enable-mbstring \
 --enable-calendar \
 --enable-bcmath \
-#--enable-zip \
+--enable-zip \
 --with-openssl \
 --enable-exif \
 --enable-ftp \
@@ -76,7 +76,7 @@ RUN echo "zend_extension=xdebug.so" >> /usr/local/lib/php.ini \
 && echo "xdebug.remote_enable=1" >> /usr/local/lib/php.ini \
 && echo "xdebug.remote_handler=dbgp" >> /usr/local/lib/php.ini \
 && echo "xdebug.remote_mode=req" >> /usr/local/lib/php.ini \
-&& echo "xdebug.remote_host=172.17.0.1" >> /usr/local/lib/php.ini \
+&& echo "xdebug.remote_host=host.docker.internal" >> /usr/local/lib/php.ini \
 && echo "xdebug.remote_port=9000" >> /usr/local/lib/php.ini \
 && echo "xdebug.remote_autostart=1" >> /usr/local/lib/php.ini \
 && echo "xdebug.extended_info=1" >> /usr/local/lib/php.ini \

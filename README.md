@@ -10,3 +10,4 @@
 - pear
 - xdebug
 - oci8
+- zip
