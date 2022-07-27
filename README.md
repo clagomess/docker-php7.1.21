@@ -11,3 +11,4 @@
 - xdebug
 - oci8
 - zip
+- opcache

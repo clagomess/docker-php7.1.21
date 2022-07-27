@@ -2,6 +2,7 @@ version: '3'
 services:
   web:
     build: .
+    network_mode: "bridge"
     ports:
       - "8000:80"
     volumes:

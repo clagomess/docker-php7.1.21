@@ -59,7 +59,7 @@ RUN cd /srv/php-7.1.21 \
 --enable-wddx \
 --enable-dba \
 --with-gettext \
---enable-opcache=no \
+--enable-opcache=yes \
 --with-oci8=instantclient,/opt/oracle/instantclient_19_6 \
 --with-pdo-oci=instantclient,/opt/oracle,19.6 \
 --with-zlib
@@ -72,20 +72,32 @@ RUN cd /srv/php-7.1.21 && cp php.ini-production /usr/local/lib/php.ini
 # php xdebug
 RUN pecl channel-update pecl.php.net
 RUN pecl install xdebug-2.9.8
-RUN echo "zend_extension=xdebug.so" >> /usr/local/lib/php.ini \
-&& echo "xdebug.remote_enable=1" >> /usr/local/lib/php.ini \
-&& echo "xdebug.remote_handler=dbgp" >> /usr/local/lib/php.ini \
-&& echo "xdebug.remote_mode=req" >> /usr/local/lib/php.ini \
-&& echo "xdebug.remote_host=host.docker.internal" >> /usr/local/lib/php.ini \
-&& echo "xdebug.remote_port=9000" >> /usr/local/lib/php.ini \
-&& echo "xdebug.remote_autostart=1" >> /usr/local/lib/php.ini \
-&& echo "xdebug.extended_info=1" >> /usr/local/lib/php.ini \
-&& echo "xdebug.remote_connect_back = 0" >> /usr/local/lib/php.ini
-
-RUN echo "date.timezone = America/Sao_Paulo" >> /usr/local/lib/php.ini \
-&& echo "short_open_tag=On" >> /usr/local/lib/php.ini \
-&& echo "display_errors = On" >> /usr/local/lib/php.ini \
-&& echo "error_reporting = E_ALL & ~E_DEPRECATED & ~E_NOTICE" >> /usr/local/lib/php.ini
+RUN echo '\n\
+zend_extension=opcache.so\n\
+opcache.memory_consumption=128\n\
+opcache.interned_strings_buffer=8\n\
+opcache.max_accelerated_files=4000\n\
+opcache.revalidate_freq=60\n\
+opcache.fast_shutdown=1\n\
+opcache.enable_cli=1\n\
+\n\
+zend_extension=xdebug.so\n\
+xdebug.remote_enable=1\n\
+xdebug.remote_handler=dbgp\n\
+xdebug.remote_mode=req\n\
+xdebug.remote_host=host.docker.internal\n\
+xdebug.remote_port=9000\n\
+xdebug.remote_autostart=1\n\
+xdebug.extended_info=1\n\
+xdebug.remote_connect_back = 0\n\
+\n\
+date.timezone = America/Sao_Paulo\n\
+short_open_tag=On\n\
+display_errors = On\n\
+error_reporting = E_ALL & ~E_DEPRECATED & ~E_NOTICE\n\
+log_errors = On\n\
+error_log = /usr/local/apache2/logs/error_log\n\
+' >> /usr/local/lib/php.ini
 
 # config httpd
 RUN echo "AddType application/x-httpd-php .php .phtml" >> /usr/local/apache2/conf/httpd.conf \
